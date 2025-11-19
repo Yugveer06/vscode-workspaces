@@ -1,5 +1,4 @@
-import React from "react";
-import { ActionPanel, List, Action, Icon } from "@raycast/api";
+import { Action, ActionPanel, Icon, List } from "@raycast/api";
 import type { Workspace } from "../types";
 
 type Item = Workspace & { icon: string };

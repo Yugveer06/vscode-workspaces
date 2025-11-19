@@ -3,12 +3,27 @@ import { join, relative, sep } from "path";
 import { readdir } from "fs/promises";
 import { pathExists, readJson, uriToPath, normalizePathForPlatform } from "../utils/fs";
 import type { Workspace } from "../types";
+import { exec as execCb } from "child_process";
+import { promisify } from "util";
+
+const exec = promisify(execCb);
+
+// ----------------------------------------------
+// TYPES
+// ----------------------------------------------
+
+interface VSCodeWorkspaceJSON {
+  folder?: string;
+  configURIPath?: string;
+  configPath?: string;
+  folderUri?: string;
+  [key: string]: unknown;
+}
 
 // ----------------------------------------------
 // STORAGE PATHS
 // ----------------------------------------------
 
-/** Candidate storage locations for Windows and macOS only */
 function getCandidateStoragePaths(): string[] {
   const home = homedir();
   const candidates: string[] = [];
@@ -48,11 +63,12 @@ export async function loadWorkspaces(): Promise<Workspace[]> {
   for (const id of entries) {
     try {
       const workspaceJsonPath = join(storagePath, id, "workspace.json");
-      const data = await readJson<any>(workspaceJsonPath);
+      const data = await readJson<VSCodeWorkspaceJSON>(workspaceJsonPath);
       if (!data) continue;
 
       const folderUri = data.folder || data.configURIPath || data.configPath || data.folderUri;
-      if (!folderUri) continue;
+
+      if (!folderUri || typeof folderUri !== "string") continue;
 
       const rawPath = uriToPath(folderUri);
       const path = normalizePathForPlatform(rawPath);
@@ -74,19 +90,16 @@ export async function loadWorkspaces(): Promise<Workspace[]> {
 // ----------------------------------------------
 
 export async function openWorkspaceCLI(pathToOpen: string): Promise<void> {
-  const { exec } = await import("child_process");
-
-  return new Promise((resolve, reject) => {
-    exec(`code "${pathToOpen}"`, (err) => {
-      if (!err) return resolve();
-
-      if (process.platform === "darwin") {
-        exec(`open -a "Visual Studio Code" --args "${pathToOpen}"`, (e) => (e ? reject(e) : resolve()));
-      } else {
-        reject(err);
-      }
-    });
-  });
+  try {
+    await exec(`code "${pathToOpen}"`);
+    return;
+  } catch {
+    if (process.platform === "darwin") {
+      await exec(`open -a "Visual Studio Code" --args "${pathToOpen}"`);
+      return;
+    }
+    throw new Error("Failed to open VS Code using CLI");
+  }
 }
 
 // ----------------------------------------------
@@ -103,23 +116,16 @@ function escapeDoubleQuotes(str: string) {
   return str.replace(/"/g, '\\"');
 }
 
-function execShell(cmd: string): Promise<void> {
-  return new Promise((resolve, reject) => {
-    const { exec } = require("child_process");
-    exec(cmd, { windowsHide: true, maxBuffer: 1024 * 1024 * 10 }, (err: any) => {
-      if (err) return reject(err);
-      resolve();
-    });
-  });
+async function execShell(cmd: string): Promise<void> {
+  try {
+    await exec(cmd);
+  } catch (err) {
+    throw err instanceof Error ? err : new Error(String(err));
+  }
 }
 
 function extractErrorMessage(err: unknown): string {
-  if (err instanceof Error) return err.message;
-  try {
-    return JSON.stringify(err);
-  } catch {
-    return String(err);
-  }
+  return err instanceof Error ? err.message : String(err);
 }
 
 // ----------------------------------------------
@@ -137,48 +143,37 @@ export async function deleteWorkspaceById(id: string): Promise<void> {
 
   const workspaceFolderPath = join(storagePath, safeId);
 
-  // Protect from accidental deletion outside storage folder
   const rel = relative(storagePath, workspaceFolderPath);
   if (!rel || rel.startsWith("..") || rel.startsWith(`..${sep}`)) {
     throw new Error("Refusing deletion: path escapes workspaceStorage");
   }
 
-  if (!(await pathExists(workspaceFolderPath))) {
-    return; // already gone
-  }
+  if (!(await pathExists(workspaceFolderPath))) return;
 
-  // FIRST: Try native Node fs.rm
   try {
     await rm(workspaceFolderPath, { recursive: true, force: true });
     return;
   } catch (err) {
     const primary = extractErrorMessage(err);
 
-    // SECOND: Windows fallback
     if (process.platform === "win32") {
       try {
-        const esc = escapeDoubleQuotes(workspaceFolderPath);
-        await execShell(`cmd /c rd /s /q "${esc}"`);
+        await execShell(`cmd /c rd /s /q "${escapeDoubleQuotes(workspaceFolderPath)}"`);
         return;
-      } catch (err2) {
-        const fallback = extractErrorMessage(err2);
-        throw new Error(`Failed to delete workspace folder: ${primary}. Fallback error: ${fallback}`);
+      } catch (fallback) {
+        throw new Error(`Failed to delete workspace: ${primary}. Fallback error: ${extractErrorMessage(fallback)}`);
       }
     }
 
-    // THIRD: macOS fallback
     if (process.platform === "darwin") {
       try {
-        const esc = escapeDoubleQuotes(workspaceFolderPath);
-        await execShell(`rm -rf "${esc}"`);
+        await execShell(`rm -rf "${escapeDoubleQuotes(workspaceFolderPath)}"`);
         return;
-      } catch (err2) {
-        const fallback = extractErrorMessage(err2);
-        throw new Error(`Failed to delete workspace folder: ${primary}. Fallback error: ${fallback}`);
+      } catch (fallback) {
+        throw new Error(`Failed to delete workspace: ${primary}. Fallback error: ${extractErrorMessage(fallback)}`);
       }
     }
 
-    // OTHERWISE
-    throw new Error(`Failed to delete workspace folder: ${primary}`);
+    throw new Error(`Failed to delete workspace: ${primary}`);
   }
 }

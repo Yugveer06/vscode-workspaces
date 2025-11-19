@@ -248,7 +248,9 @@ export async function detectProjectType(dir: string) {
   for (const type of projectTypes) {
     try {
       if (await type.test(dir)) return type;
-    } catch {}
+    } catch {
+      // ignore detection errors
+    }
   }
   return null;
 }

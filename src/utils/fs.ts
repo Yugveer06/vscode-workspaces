@@ -12,10 +12,11 @@ export async function pathExists(p: string): Promise<boolean> {
 }
 
 /** Safely read and parse JSON file; returns null on failure */
-export async function readJson<T = any>(p: string): Promise<T | null> {
+export async function readJson<T = unknown>(p: string): Promise<T | null> {
   try {
     const s = await readFile(p, "utf8");
-    return JSON.parse(s) as T;
+    const parsed = JSON.parse(s) as unknown;
+    return parsed as T;
   } catch {
     return null;
   }
