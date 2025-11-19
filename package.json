@@ -1,17 +1,17 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "vscode-workspace-finder",
-  "title": "VSCode Workspace Finder",
-  "description": "Directly open VSCode workspaces from Raycast!",
-  "icon": "icon.png",
+  "name": "vscode-workspaces",
+  "title": "VS Code Workspaces",
+  "description": "Quickly browse, open, and manage your VS Code workspaces from Raycast.",
+  "icon": "extension-icon.png",
   "license": "MIT",
   "commands": [
     {
       "name": "index",
-      "title": "Code",
-      "description": "Find and open VSCode workspaces quickly!",
+      "title": "VS Code Workspaces",
+      "description": "Search and open your VS Code workspaces instantly.",
       "mode": "view",
-      "subtitle": "Find workspaces"
+      "subtitle": "Workspace Browser"
     }
   ],
   "dependencies": {
@@ -36,6 +36,7 @@
   },
   "author": "yugveer_wadzatia",
   "platforms": [
+    "macOS",
     "Windows"
   ],
   "categories": [
