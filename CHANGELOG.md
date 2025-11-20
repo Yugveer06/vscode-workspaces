@@ -1,6 +1,6 @@
 # VS Code Workspaces Changelog
 
-## [Bugfix & Improvements] - 2025-11-20
+## [Bugfix & Improvements] - {PR_MERGE_DATE}
 
 - Fixed workspace deletion on Windows and macOS
 - Improved error handling and stability
@@ -8,6 +8,6 @@
 - Added macOS support
 - Refactored codebase into a cleaner folder structure
 
-## [Initial Version] - 2025-11-19
+## [Initial Version] - {PR_MERGE_DATE}
 
 - Added commands to browse, open, delete, and copy VS Code workspaces (Windows only)
