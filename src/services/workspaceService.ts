@@ -5,6 +5,7 @@ import { pathExists, readJson, uriToPath, normalizePathForPlatform } from "../ut
 import type { Workspace } from "../types";
 import { exec as execCb } from "child_process";
 import { promisify } from "util";
+import { trash } from "@raycast/api";
 
 const exec = promisify(execCb);
 
@@ -133,8 +134,6 @@ function extractErrorMessage(err: unknown): string {
 // ----------------------------------------------
 
 export async function deleteWorkspaceById(id: string): Promise<void> {
-  const { rm } = await import("fs/promises");
-
   const storagePath = await findWorkspaceStoragePath();
   if (!storagePath) throw new Error("Workspace storage path not found");
 
@@ -143,6 +142,7 @@ export async function deleteWorkspaceById(id: string): Promise<void> {
 
   const workspaceFolderPath = join(storagePath, safeId);
 
+  // Ensure it's inside the workspace directory
   const rel = relative(storagePath, workspaceFolderPath);
   if (!rel || rel.startsWith("..") || rel.startsWith(`..${sep}`)) {
     throw new Error("Refusing deletion: path escapes workspaceStorage");
@@ -150,30 +150,10 @@ export async function deleteWorkspaceById(id: string): Promise<void> {
 
   if (!(await pathExists(workspaceFolderPath))) return;
 
+  // Use Raycast’s safe trash API (moves to system trash)
   try {
-    await rm(workspaceFolderPath, { recursive: true, force: true });
-    return;
+    await trash(workspaceFolderPath);
   } catch (err) {
-    const primary = extractErrorMessage(err);
-
-    if (process.platform === "win32") {
-      try {
-        await execShell(`cmd /c rd /s /q "${escapeDoubleQuotes(workspaceFolderPath)}"`);
-        return;
-      } catch (fallback) {
-        throw new Error(`Failed to delete workspace: ${primary}. Fallback error: ${extractErrorMessage(fallback)}`);
-      }
-    }
-
-    if (process.platform === "darwin") {
-      try {
-        await execShell(`rm -rf "${escapeDoubleQuotes(workspaceFolderPath)}"`);
-        return;
-      } catch (fallback) {
-        throw new Error(`Failed to delete workspace: ${primary}. Fallback error: ${extractErrorMessage(fallback)}`);
-      }
-    }
-
-    throw new Error(`Failed to delete workspace: ${primary}`);
+    throw new Error(`${extractErrorMessage(err)}`);
   }
 }
