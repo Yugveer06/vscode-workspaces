@@ -113,18 +113,6 @@ function sanitizeId(id: string): string | null {
   return id;
 }
 
-function escapeDoubleQuotes(str: string) {
-  return str.replace(/"/g, '\\"');
-}
-
-async function execShell(cmd: string): Promise<void> {
-  try {
-    await exec(cmd);
-  } catch (err) {
-    throw err instanceof Error ? err : new Error(String(err));
-  }
-}
-
 function extractErrorMessage(err: unknown): string {
   return err instanceof Error ? err.message : String(err);
 }
