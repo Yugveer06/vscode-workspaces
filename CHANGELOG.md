@@ -2,6 +2,10 @@
 
 ## [Bugfix & Improvements] - {PR_MERGE_DATE}
 
+- Made the shortcuts for copying path and deleting workspace common as intended by Raycast
+
+## [Bugfix & Improvements] - {PR_MERGE_DATE}
+
 - Use Raycast's safe trash API instead of platform specific deletion
 - Fixed metadata images to be correct sizes
 
