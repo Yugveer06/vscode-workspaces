@@ -75,7 +75,62 @@ https://raycast.com/yugveer28/vscode-workspaces
 Or build from source:
 
 ```bash
-git clone https://github.com/yugveer06/vscode-workspace-finder.git
-cd vscode-workspace-finder
+git clone https://github.com/Yugveer06/vscode-workspaces.git
+cd vscode-workspaces
 npm install
 npm run dev
+```
+
+## Usage
+
+1. Open Raycast
+2. Run the command "VS Code Workspaces"
+3. Search for a workspace
+4. Press Enter to open or use actions for more options
+
+### Default shortcuts
+
+Action | Shortcut
+------ | --------
+Open workspace | Enter
+Toggle favorite | Cmd + R
+Open in terminal | Cmd + Shift + T
+Reveal in file explorer | Cmd + Shift + R
+Copy path | Cmd + Shift + C
+Copy name | Cmd + Shift + C
+Delete from history | Cmd + Backspace
+
+## Requirements
+
+- Visual Studio Code or a supported variant
+- macOS or Windows
+
+Git is optional and only used if branch information is available.
+
+## How it works
+
+The extension reads VS Code’s local workspace storage:
+
+- macOS: ~/Library/Application Support/Code/User/workspaceStorage
+- Windows: %APPDATA%\Code\User\workspaceStorage
+
+No data is uploaded or synced externally.
+
+## Privacy
+
+All data is stored locally using Raycast’s LocalStorage API.
+Workspace paths and metadata never leave your machine.
+
+## Contributing
+
+Pull requests are welcome.
+Please keep changes minimal and focused.
+
+## License
+
+MIT License. See the LICENSE file for details.
+
+## Credits
+
+Author: Yugveer Singh Wadzatia
+Icons: https://devicon.dev
