@@ -34,7 +34,7 @@ export default function WorkspaceList({
   workspaces,
   isLoading,
   sortOption,
-  // onOpen,
+  onOpen,
   onToggleFavorite,
   onOpenTerminal,
   onRevealInFinder,
@@ -84,6 +84,9 @@ export default function WorkspaceList({
             keywords={keywords}
             actions={
               <ActionPanel>
+                <ActionPanel.Section title="Open">
+                  <Action title="Open in VS Code" icon={Icon.Code} onAction={async () => await onOpen(w)} />
+                </ActionPanel.Section>
                 <ActionPanel.Section title="Quick Actions">
                   <Action
                     title={w.metadata.isFavorite ? "Remove from Favorites" : "Add to Favorites"}
