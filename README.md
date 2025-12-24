@@ -90,15 +90,16 @@ npm run dev
 
 ### Default shortcuts
 
-Action | Shortcut
------- | --------
-Open workspace | Enter
-Toggle favorite | Cmd + R
-Open in terminal | Cmd + Shift + T
-Reveal in file explorer | Cmd + Shift + R
-Copy path | Cmd + Shift + C
-Copy name | Cmd + Shift + C
-Delete from history | Cmd + Backspace
+Action | Shortcut (Windows) | Shortcut (macOS)
+------ | -------- | --------
+Open workspace | `Enter` | `Enter`
+Open with | `Ctrl` + `Shift` + `O` | `⌘` + `⇧` + `O`
+Toggle favorite | `Ctrl` + `.` | `⌘` + `⇧` + `P`
+Open in terminal | `Ctrl` + `T` | `⌘` + `T`
+Reveal in file explorer | `Ctrl` + `E` | `⌘` + `E`
+Copy path | `Alt` + `Shift` + `C` | `⌘` + `⇧` + `,`
+Copy name | `Ctrl` + `Alt` + `C` | `⌘` + `⇧` + `.`
+Delete workspace | `Ctrl` + `D` | `⌃` + `X`
 
 ## Requirements
 
