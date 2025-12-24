@@ -86,6 +86,7 @@ export default function WorkspaceList({
               <ActionPanel>
                 <ActionPanel.Section title="Open">
                   <Action title="Open in VS Code" icon={Icon.Code} onAction={async () => await onOpen(w)} />
+                  <Action.OpenWith path={w.path} />
                 </ActionPanel.Section>
                 <ActionPanel.Section title="Quick Actions">
                   <Action
