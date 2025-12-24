@@ -1,42 +1,42 @@
 # VS Code Workspaces for Raycast
 
-Quickly browse, open, and manage your VS Code workspaces directly from Raycast.
-
-![VS Code Workspaces Extension](metadata/vscode-workspaces-1.png)
+Browse and open your Visual Studio Code workspaces directly from Raycast.  
+The extension reads VS Code’s workspace history and presents it in a searchable list with useful actions.
 
 ## Features
 
-### 🚀 Quick Access
-- **Instant Search**: Find your workspaces with blazing-fast search
-- **Smart Icons**: Automatic project type detection with matching icons (React, Vue, Python, Go, and more)
-- **Recently Opened**: See when you last opened each workspace
-- **Multiple Sort Options**: Sort alphabetically, by recent activity, favorites first, or project type
+### Workspace listing
+- Fast search across all known workspaces
+- Displays recently opened time
+- Sort by name, recent activity, favorites, or project type
+- Supports pinned (favorite) workspaces
 
-### ⭐ Favorites & Organization
-- **Pin Workspaces**: Mark frequently-used workspaces as favorites (`⌘F`)
-- **Favorites First**: Keep your most important projects at the top
-- **Time Tracking**: See when you last opened each workspace ("2h ago", "3d ago")
+### Actions
+- Open workspace in VS Code
+- Mark or unmark workspace as favorite
+- Open workspace directory in terminal
+- Reveal workspace folder in Finder / Explorer
+- Copy workspace path
+- Copy workspace name
+- Remove workspace from VS Code history
 
-### 💪 Powerful Actions
-- **Open in VS Code**: Launch workspace instantly (`↵`)
-- **Toggle Favorites**: Pin/unpin workspaces (`⌘R`)
-- **Open in Terminal**: Jump directly to workspace in your terminal (`⌘⇧T`)
-- **Reveal in Finder/Explorer**: Open workspace folder in file explorer (`⌘⇧R`)
-- **Copy Path**: Quick clipboard access (`⌘⇧C`)
-- **Copy Name**: Copy workspace name (`⌘⇧C`)
-- **Delete Workspace**: Remove from VS Code history (`⌘⌫`)
+### Editor support
+- Visual Studio Code
+- VS Code Insiders
+- VSCodium
+- Cursor
 
-### 🎯 Smart Features
-- **Cross-Platform**: Works on macOS and Windows
-- **Multi-Editor Support**: Detects VS Code, VS Code Insiders, VSCodium, and Cursor
-- **Project Detection**: Automatic recognition of 20+ project types and frameworks
-- **Safe Deletion**: Workspaces moved to system trash, not permanently deleted
+### Platform support
+- macOS
+- Windows
 
-## Supported Project Types
+## Project type detection
 
-The extension automatically detects and displays appropriate icons for:
+The extension attempts to detect the project type based on files in the workspace and shows a matching icon.
 
-**JavaScript/TypeScript:**
+Detected ecosystems include:
+
+**JavaScript / TypeScript**
 - Raycast Extensions
 - Next.js
 - React
@@ -45,14 +45,14 @@ The extension automatically detects and displays appropriate icons for:
 - Svelte
 - Node.js
 
-**Backend Frameworks:**
+**Backend frameworks**
 - Django
 - Flask
 - FastAPI
 - Spring
 - Ruby on Rails
 
-**Languages:**
+**Languages**
 - Python
 - Go
 - Rust
@@ -69,62 +69,13 @@ The extension automatically detects and displays appropriate icons for:
 
 ## Installation
 
-Install from the [Raycast Store](https://raycast.com/yugveer_wadzatia/vscode-workspaces) or build from source:
+Install from the Raycast Store:  
+https://raycast.com/yugveer28/vscode-workspaces
+
+Or build from source:
 
 ```bash
 git clone https://github.com/yugveer06/vscode-workspace-finder.git
 cd vscode-workspace-finder
 npm install
 npm run dev
-```
-
-## Usage
-
-1. Open Raycast (`⌘Space` or your configured hotkey)
-2. Type "VS Code Workspaces" or set up a custom alias
-3. Search for your workspace
-4. Press `↵` to open or browse available actions
-
-### Keyboard Shortcuts
-
-| Action | Shortcut |
-|--------|----------|
-| Open in VS Code | `↵` |
-| Toggle Favorite | `⌘R` |
-| Open in Terminal | `⌘⇧T` |
-| Reveal in Finder/Explorer | `⌘⇧R` |
-| Copy Path | `⌘⇧C` |
-| Copy Name | `⌘⇧C` |
-| Delete Workspace | `⌘⌫` |
-
-## Requirements
-
-- **VS Code**: The extension reads workspace history from VS Code's storage
-- **macOS or Windows**: Cross-platform support
-- **Optional**: Git for branch information display
-
-## How It Works
-
-The extension reads VS Code's workspace storage from:
-- **macOS**: `~/Library/Application Support/Code/User/workspaceStorage`
-- **Windows**: `%APPDATA%\Code\User\workspaceStorage`
-
-It also supports VS Code Insiders and VSCodium variants.
-
-## Privacy
-
-All data is stored locally on your machine using Raycast's LocalStorage API. Your workspace data never leaves your computer.
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-## License
-
-MIT License - see LICENSE file for details
-
-## Credits
-
-Built by [Yugveer Wadzatia](https://github.com/yugveer06)
-
-Icons provided by [Devicon](https://devicon.dev)
