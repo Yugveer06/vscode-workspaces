@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { showToast, Toast, confirmAlert, Alert } from "@raycast/api";
+import { showToast, Toast, confirmAlert, Alert, closeMainWindow } from "@raycast/api";
 import WorkspaceList from "./components/WorkspaceList";
 import type { WorkspaceWithMetadata, SortOption } from "./types";
 import { loadWorkspaces, deleteWorkspaceById } from "./services/workspaceService";
@@ -110,6 +110,12 @@ export default function Command() {
 
   async function handleOpen(w: WorkspaceWithMetadata) {
     try {
+      await showToast({
+        style: Toast.Style.Animated,
+        title: "Opening workspace",
+        message: w.name,
+      });
+
       await openWorkspaceInEditor(w.path, "code");
       await updateLastOpened(w.id);
 
@@ -122,9 +128,10 @@ export default function Command() {
         ),
       );
 
+      await closeMainWindow();
       await showToast({
         style: Toast.Style.Success,
-        title: "Opening workspace",
+        title: "Opened workspace",
         message: w.name,
       });
     } catch (err) {
@@ -167,8 +174,10 @@ export default function Command() {
 
   async function handleOpenTerminal(w: WorkspaceWithMetadata) {
     try {
+      await showToast({ style: Toast.Style.Animated, title: "Opening terminal", message: w.name });
       await openInTerminal(w.path);
-      await showToast({ style: Toast.Style.Success, title: "Opening terminal", message: w.name });
+      await closeMainWindow();
+      await showToast({ style: Toast.Style.Success, title: "Opened terminal", message: w.name });
     } catch (err) {
       await showToast({
         style: Toast.Style.Failure,
@@ -180,10 +189,15 @@ export default function Command() {
 
   async function handleRevealInFinder(w: WorkspaceWithMetadata) {
     try {
+      await showToast({
+        style: Toast.Style.Animated,
+        title: process.platform === "darwin" ? "Revealing in Finder" : "Revealing in Explorer",
+        message: w.name,
+      });
       await revealInFinder(w.path);
       await showToast({
         style: Toast.Style.Success,
-        title: process.platform === "darwin" ? "Revealing in Finder" : "Revealing in Explorer",
+        title: process.platform === "darwin" ? "Opened in Finder" : "Opened in Explorer",
         message: w.name,
       });
     } catch (err) {
@@ -205,12 +219,25 @@ export default function Command() {
     if (!confirmed) return;
 
     try {
+      await showToast({
+        style: Toast.Style.Animated,
+        title: "Deleting workspace...",
+        message: w.name,
+      });
       await deleteWorkspaceById(w.id);
       setWorkspaces((prev) => prev.filter((x) => x.id !== w.id));
-      await showToast({ style: Toast.Style.Success, title: "Workspace deleted", message: w.name });
+      await showToast({
+        style: Toast.Style.Success,
+        title: "Workspace deleted",
+        message: w.name,
+      });
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
-      await showToast({ style: Toast.Style.Failure, title: "Failed to delete workspace", message: msg });
+      await showToast({
+        style: Toast.Style.Failure,
+        title: "Failed to delete workspace",
+        message: msg,
+      });
     }
   }
 
