@@ -1,6 +1,5 @@
 import { Action, ActionPanel, Icon, Keyboard, List } from "@raycast/api";
-import type { WorkspaceWithMetadata, SortOption } from "../types";
-import path from "path";
+import type { SortOption, WorkspaceWithMetadata } from "../types";
 
 type Props = {
   workspaces: WorkspaceWithMetadata[];
@@ -35,7 +34,7 @@ export default function WorkspaceList({
   workspaces,
   isLoading,
   sortOption,
-  onOpen,
+  // onOpen,
   onToggleFavorite,
   onOpenTerminal,
   onRevealInFinder,
@@ -85,27 +84,23 @@ export default function WorkspaceList({
             keywords={keywords}
             actions={
               <ActionPanel>
-                <ActionPanel.Section title="Open">
-                  <Action title="Open in VS Code" icon={Icon.Code} onAction={async () => await onOpen(w)} />
-                </ActionPanel.Section>
-
                 <ActionPanel.Section title="Quick Actions">
                   <Action
                     title={w.metadata.isFavorite ? "Remove from Favorites" : "Add to Favorites"}
                     icon={w.metadata.isFavorite ? Icon.StarDisabled : Icon.Star}
-                    shortcut={{ modifiers: ["cmd"], key: "f" }}
+                    shortcut={Keyboard.Shortcut.Common.Pin}
                     onAction={async () => await onToggleFavorite(w)}
                   />
                   <Action
                     title="Open in Terminal"
                     icon={Icon.Terminal}
-                    shortcut={{ modifiers: ["cmd"], key: "t" }}
+                    shortcut={{ Windows: { modifiers: ["ctrl"], key: "t" }, macOS: { modifiers: ["cmd"], key: "t" } }}
                     onAction={async () => await onOpenTerminal(w)}
                   />
                   <Action
                     title={process.platform === "darwin" ? "Reveal in Finder" : "Reveal in Explorer"}
                     icon={Icon.Finder}
-                    shortcut={{ modifiers: ["cmd"], key: "r" }}
+                    shortcut={{ Windows: { modifiers: ["ctrl"], key: "e" }, macOS: { modifiers: ["cmd"], key: "e" } }}
                     onAction={async () => await onRevealInFinder(w)}
                   />
                 </ActionPanel.Section>
