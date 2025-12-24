@@ -1,3 +1,4 @@
+import { showInFinder } from "@raycast/api";
 import { exec as execCb } from "child_process";
 import { promisify } from "util";
 
@@ -43,13 +44,6 @@ export async function openInTerminal(workspacePath: string): Promise<void> {
 // ----------------------------------------------
 
 export async function revealInFinder(workspacePath: string): Promise<void> {
-  if (process.platform === "darwin") {
-    await exec(`open "${workspacePath}"`);
-  } else if (process.platform === "win32") {
-    // Use explorer without throwing errors - normalize path for Windows
-    const normalizedPath = workspacePath.replace(/\//g, "\\");
-    await exec(`explorer "${normalizedPath}"`);
-  } else {
-    throw new Error("Platform not supported for reveal in finder");
-  }
+  const normalizedPath = workspacePath.replace(/\//g, "\\");
+  await showInFinder(normalizedPath);
 }
