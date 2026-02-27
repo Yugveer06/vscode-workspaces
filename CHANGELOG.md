@@ -1,5 +1,37 @@
 # VS Code Workspaces Changelog
 
+## [Major Feature Update] - {PR_MERGE_DATE}
+
+- Tag System
+  - Create custom tags with optional colors (Red, Orange, Yellow, Green, Blue, Purple, Magenta)
+  - Add multiple tags to any workspace for better organization
+  - Filter workspaces by tags with AND logic (must match all selected tags)
+  - Filter to show only untagged workspaces
+  - Tags displayed as colored badges on workspace items
+  - Tags included in search keywords for fuzzy finding
+  - New "Manage Workspace Tags" command to create, rename, and delete tags
+  - Deleting a tag removes it from all workspaces automatically
+
+- Smart Grouping
+  - Workspaces now automatically group based on sort option:
+    - Recently Opened: "Recent Workspaces" (last 7 days) and "Other Workspaces"
+    - Favourites First: "Favourite Workspaces" and "Other Workspaces"
+    - Project Type: Grouped by detected type (React, Rust, Python, Next.js, etc.)
+    - Alphabetical: Single flat list
+  - Each group shows a count in the section subtitle
+
+- Filter Bar
+  - Visible filter indicator at the top when filters are active
+  - Shows all active tag filters with colored badges
+  - Quick actions to add, remove, or clear filters
+  - Displays count of matching workspaces
+
+- Improvements
+  - Separated sort dropdown (cleaner UI)
+  - Filter actions added to each workspace's action panel
+  - Added "Edit Tags" action with ⌘+E shortcut
+  - Added "Manage All Tags" action with ⌘+⇧+T shortcut
+
 ## [Bugfix & Improvements] - {PR_MERGE_DATE}
 
 - Added OpenWith action in the action panel

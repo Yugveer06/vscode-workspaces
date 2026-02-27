@@ -1,11 +1,14 @@
+import { exec as execCb } from "child_process";
+import { readdir } from "fs/promises";
 import { homedir } from "os";
 import { join, relative, sep } from "path";
-import { readdir } from "fs/promises";
-import { pathExists, readJson, uriToPath, normalizePathForPlatform } from "../utils/fs";
-import type { Workspace } from "../types";
-import { exec as execCb } from "child_process";
 import { promisify } from "util";
+
 import { trash } from "@raycast/api";
+
+import { pathExists, readJson, uriToPath, normalizePathForPlatform } from "@utils/fs";
+
+import type { Workspace } from "@/types";
 
 const exec = promisify(execCb);
 

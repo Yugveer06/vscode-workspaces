@@ -1,5 +1,5 @@
-import { access, readFile } from "fs/promises";
 import { constants } from "fs";
+import { access, readFile } from "fs/promises";
 
 /** Check whether a path exists */
 export async function pathExists(p: string): Promise<boolean> {

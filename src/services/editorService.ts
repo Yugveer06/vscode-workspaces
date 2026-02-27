@@ -1,6 +1,7 @@
 import { exec as execCb } from "child_process";
 import { promisify } from "util";
-import type { EditorVariant } from "../types";
+
+import type { EditorVariant } from "@/types";
 
 const exec = promisify(execCb);
 

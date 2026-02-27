@@ -1,14 +1,23 @@
-import { detectProjectType } from "./projectDetector";
-import type { Workspace } from "../types";
+import { Icon } from "@raycast/api";
 
-export async function assignIconsToWorkspaces(list: Workspace[]): Promise<(Workspace & { icon: string })[]> {
-  const out: (Workspace & { icon: string })[] = [];
+import { detectProjectType } from "@services/projectDetector";
+
+import type { Workspace } from "@/types";
+
+interface WorkspaceWithIcon extends Workspace {
+  icon: string;
+  projectType?: string;
+}
+
+export async function assignIconsToWorkspaces(list: Workspace[]): Promise<WorkspaceWithIcon[]> {
+  const out: WorkspaceWithIcon[] = [];
 
   for (const w of list) {
     const detected = await detectProjectType(w.path);
     out.push({
       ...w,
-      icon: detected?.icon ?? "https://cdn.jsdelivr.net/gh/devicons/devicon/icons/code/code-original.svg",
+      icon: detected?.icon ?? Icon.Folder,
+      projectType: detected?.id,
     });
   }
 

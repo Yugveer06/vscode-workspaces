@@ -13,6 +13,7 @@ export interface WorkspaceMetadata {
 
 export interface WorkspaceWithMetadata extends Workspace {
   icon: string;
+  projectType?: string; // e.g., "react", "rust", "python"
   metadata: WorkspaceMetadata;
 }
 

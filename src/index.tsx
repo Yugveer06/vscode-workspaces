@@ -1,18 +1,20 @@
-import React, { useEffect, useState } from "react";
-import { showToast, Toast, confirmAlert, Alert, closeMainWindow } from "@raycast/api";
-import WorkspaceList from "./components/WorkspaceList";
-import type { WorkspaceWithMetadata, SortOption } from "./types";
-import { loadWorkspaces, deleteWorkspaceById } from "./services/workspaceService";
-import { assignIconsToWorkspaces } from "./services/iconService";
-import { openWorkspaceInEditor } from "./services/editorService";
-import { openInTerminal, revealInFinder } from "./services/terminalService";
+import { showToast, Toast, confirmAlert, Alert, closeMainWindow, OpenWithAction } from "@raycast/api";
+import { useEffect, useState } from "react";
+
+import WorkspaceList from "@components/WorkspaceList";
+import { openWorkspaceInEditor } from "@services/editorService";
+import { assignIconsToWorkspaces } from "@services/iconService";
 import {
   getAllWorkspaceMetadata,
   toggleFavorite,
   updateLastOpened,
   getSortPreference,
   setSortPreference,
-} from "./services/storageService";
+} from "@services/storageService";
+import { openInTerminal, revealInFinder } from "@services/terminalService";
+import { loadWorkspaces, deleteWorkspaceById } from "@services/workspaceService";
+
+import type { WorkspaceWithMetadata, SortOption } from "@/types";
 
 export default function Command() {
   const [workspaces, setWorkspaces] = useState<WorkspaceWithMetadata[]>([]);
@@ -24,6 +26,8 @@ export default function Command() {
 
     (async () => {
       try {
+        // await new Promise((resolve) => setTimeout(resolve, 2000)); // simulate loading delay
+
         // Load workspaces and metadata
         const list = await loadWorkspaces();
         const withIcons = await assignIconsToWorkspaces(list);
@@ -143,6 +147,27 @@ export default function Command() {
     }
   }
 
+  async function handleOpenWith(w: WorkspaceWithMetadata) {
+    try {
+      await updateLastOpened(w.id);
+
+      // Update the workspace in state
+      setWorkspaces((prev) =>
+        prev.map((workspace) =>
+          workspace.id === w.id
+            ? { ...workspace, metadata: { ...workspace.metadata, lastOpened: Date.now() } }
+            : workspace,
+        ),
+      );
+    } catch (err) {
+      await showToast({
+        style: Toast.Style.Failure,
+        title: "Failed to update last opened",
+        message: err instanceof Error ? err.message : String(err),
+      });
+    }
+  }
+
   async function handleToggleFavorite(w: WorkspaceWithMetadata) {
     try {
       const newState = await toggleFavorite(w.id);
@@ -241,17 +266,27 @@ export default function Command() {
     }
   }
 
+  function handleTagsUpdated(workspaceId: string, tags: string[]) {
+    setWorkspaces((prev) =>
+      prev.map((workspace) =>
+        workspace.id === workspaceId ? { ...workspace, metadata: { ...workspace.metadata, tags } } : workspace,
+      ),
+    );
+  }
+
   return (
     <WorkspaceList
       workspaces={workspaces}
       isLoading={isLoading}
       sortOption={sortOption}
       onOpen={handleOpen}
+      onOpenWith={handleOpenWith}
       onToggleFavorite={handleToggleFavorite}
       onOpenTerminal={handleOpenTerminal}
       onRevealInFinder={handleRevealInFinder}
       onDelete={handleDelete}
       onSortChange={handleSortChange}
+      onTagsUpdated={handleTagsUpdated}
     />
   );
 }

@@ -1,0 +1,31 @@
+/**
+ * Friendly display names for detected project types
+ */
+export const PROJECT_TYPE_NAMES: Record<string, string> = {
+  raycast: "Raycast Extensions",
+  nextjs: "Next.js",
+  vue: "Vue.js",
+  angular: "Angular",
+  svelte: "Svelte",
+  react: "React",
+  nodejs: "Node.js",
+  django: "Django",
+  flask: "Flask",
+  fastapi: "FastAPI",
+  spring: "Spring",
+  rails: "Ruby on Rails",
+  python: "Python",
+  go: "Go",
+  rust: "Rust",
+  java: "Java",
+  kotlin: "Kotlin",
+  ruby: "Ruby",
+  php: "PHP",
+  csharp: "C#",
+  swift: "Swift",
+  elixir: "Elixir",
+  dart: "Dart",
+  flutter: "Flutter",
+  scala: "Scala",
+  haskell: "Haskell",
+};

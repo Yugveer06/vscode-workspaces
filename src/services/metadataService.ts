@@ -1,8 +1,9 @@
+import { exec as execCb } from "child_process";
 import { stat, readdir } from "fs/promises";
 import { join } from "path";
-import { pathExists } from "../utils/fs";
-import { exec as execCb } from "child_process";
 import { promisify } from "util";
+
+import { pathExists } from "@utils/fs";
 
 const exec = promisify(execCb);
 

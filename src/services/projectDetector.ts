@@ -1,5 +1,6 @@
 import { join } from "path";
-import { pathExists } from "../utils/fs";
+
+import { pathExists } from "@utils/fs";
 
 export type ProjectType = {
   id: string;
